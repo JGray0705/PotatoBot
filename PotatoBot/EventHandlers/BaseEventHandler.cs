@@ -12,11 +12,10 @@ namespace PotatoBot.EventHandlers
     {
         public static void AddEventListeners(DiscordClient client)
         {
-            var events = client.GetType().GetEvents();
-            var handlers = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(BaseEventHandler)));
+            var handlers = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(BaseEventHandler))); // get all classes that extend this class
             foreach(var handler in handlers)
             {
-                var methods = handler.GetTypeInfo().DeclaredMethods;
+                var methods = handler.GetTypeInfo().DeclaredMethods; // get the methods in each of these classes and add them as handlers to the proper events on the client
                 foreach(var method in methods)
                 {
                     var name = method.Name.Substring(7); // strip "Client_" from the name to match event name

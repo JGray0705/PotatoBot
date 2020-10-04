@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using Microsoft.Extensions.Logging;
 using PotatoBot.EventHandlers;
@@ -15,6 +16,7 @@ namespace PotatoBot
         public ulong LogChannel;
         private readonly string Token;
         public static DiscordClient Client;
+        public static CommandsNextExtension Commands;
 
         public DiscordBot(ClientConfiguration clientConfig)
         {
@@ -32,14 +34,13 @@ namespace PotatoBot
             };
 
             Client = new DiscordClient(config);
-            BaseEventHandler.AddEventListeners(Client);
-        }
 
-        public async Task Client_UnknownEvent(DiscordClient sender, DSharpPlus.EventArgs.UnknownEventArgs e)
-        {
-            var msg = "Unknown Event Triggered: " + e.EventName;
-            sender.Logger.LogWarning(msg);
-            await (await Client.GetChannelAsync(LogChannel)).SendMessageAsync(msg);
+            BaseEventHandler.SetUpEvents(Client, LogChannel);
+
+            Commands = Client.UseCommandsNext(new CommandsNextConfiguration()
+            {
+                //PrefixResolver = //some method that returns position of prefix in the string
+            });
         }
 
         public async Task RunAsync()

@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,10 @@ namespace PotatoBot.EventHandlers
 {
     public class ClientEvent : BaseEventHandler
     {
-        public static Task Client_Ready(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs e)
+        public static async Task Client_Ready(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs e)
         {
-            throw new NotImplementedException();
+            sender.Logger.LogInformation("Client ready!");
+            await (await sender.GetChannelAsync(LogChannel)).SendMessageAsync("Client ready!");
         }
 
         public static Task Client_ClientErrored(DiscordClient sender, DSharpPlus.EventArgs.ClientErrorEventArgs e)
@@ -30,7 +32,14 @@ namespace PotatoBot.EventHandlers
 
         public static Task Client_PresenceUpdated(DiscordClient sender, DSharpPlus.EventArgs.PresenceUpdateEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask; // not sure anything needs to be done here, but added just in case
+        }
+
+        public static async Task Client_UnknownEvent(DiscordClient sender, DSharpPlus.EventArgs.UnknownEventArgs e)
+        {
+            var msg = "Unknown Event Triggered: " + e.EventName;
+            sender.Logger.LogWarning(msg);
+            await (await sender.GetChannelAsync(LogChannel)).SendMessageAsync(msg);
         }
     }
 }

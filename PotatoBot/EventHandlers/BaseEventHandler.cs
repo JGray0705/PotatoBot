@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,11 @@ namespace PotatoBot.EventHandlers
 {
     public class BaseEventHandler
     {
-        public static void AddEventListeners(DiscordClient client)
+        public static ulong LogChannel;
+
+        public static void SetUpEvents(DiscordClient client, DiscordChannel channel)
         {
+            LogChannel = channel;
             var handlers = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(BaseEventHandler))); // get all classes that extend this class
             foreach(var handler in handlers)
             {

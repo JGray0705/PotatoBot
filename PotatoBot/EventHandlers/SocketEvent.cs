@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,17 +11,20 @@ namespace PotatoBot.EventHandlers
     {
         public static Task Client_SocketOpened(DiscordClient sender, DSharpPlus.EventArgs.SocketEventArgs e)
         {
-            throw new NotImplementedException();
+            sender.Logger.LogInformation("Socket Opened.");
+            return Task.CompletedTask;
         }
 
         public static Task Client_SocketErrored(DiscordClient sender, DSharpPlus.EventArgs.SocketErrorEventArgs e)
         {
-            throw new NotImplementedException();
+            sender.Logger.LogError("Socket Error: " + e.Exception);
+            return Task.CompletedTask;
         }
 
         public static Task Client_SocketClosed(DiscordClient sender, DSharpPlus.EventArgs.SocketCloseEventArgs e)
         {
-            throw new NotImplementedException();
+            sender.Logger.LogInformation("Socket Closed.");
+            return Task.CompletedTask;
         }
     }
 }

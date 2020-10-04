@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace PotatoBot.EventHandlers
 {
@@ -28,9 +29,11 @@ namespace PotatoBot.EventHandlers
             throw new NotImplementedException();
         }
 
-        public static Task Client_GuildDownloadCompleted(DiscordClient sender, DSharpPlus.EventArgs.GuildDownloadCompletedEventArgs e)
+        public static async Task Client_GuildDownloadCompleted(DiscordClient sender, DSharpPlus.EventArgs.GuildDownloadCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            // update user status.. for fun
+            var memberCount = e.Guilds.Sum(x => x.Value.MemberCount);
+            await sender.UpdateStatusAsync(new DSharpPlus.Entities.DiscordActivity(e.Guilds.Count + " guilds and " + memberCount + " members.", DSharpPlus.Entities.ActivityType.Watching));
         }
 
         public static Task Client_GuildDeleted(DiscordClient sender, DSharpPlus.EventArgs.GuildDeleteEventArgs e)

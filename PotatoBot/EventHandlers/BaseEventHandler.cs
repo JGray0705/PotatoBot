@@ -11,7 +11,7 @@ namespace PotatoBot.EventHandlers
 {
     public class BaseEventHandler
     {
-        public static ulong LogChannel;
+        public static DiscordChannel LogChannel;
 
         public static void SetUpEvents(DiscordClient client, DiscordChannel channel)
         {

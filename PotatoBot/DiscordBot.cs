@@ -35,8 +35,6 @@ namespace PotatoBot
 
             Client = new DiscordClient(config);
 
-            BaseEventHandler.SetUpEvents(Client, LogChannel);
-
             Commands = Client.UseCommandsNext(new CommandsNextConfiguration()
             {
                 //PrefixResolver = //some method that returns position of prefix in the string
@@ -47,6 +45,8 @@ namespace PotatoBot
         {
             var activity = new DiscordActivity("with startup code.", ActivityType.Playing);
             await Client.ConnectAsync(activity);
+            var channel = await Client.GetChannelAsync(LogChannel);
+            BaseEventHandler.SetUpEvents(Client, channel);
             await Task.Delay(-1);
         }
     }

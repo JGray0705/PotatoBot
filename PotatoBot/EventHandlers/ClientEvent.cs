@@ -12,7 +12,7 @@ namespace PotatoBot.EventHandlers
         public static async Task Client_Ready(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs e)
         {
             sender.Logger.LogInformation("Client ready!");
-            await (await sender.GetChannelAsync(LogChannel)).SendMessageAsync("Client ready!");
+            await LogChannel.SendMessageAsync("Client ready!");
         }
 
         public static Task Client_ClientErrored(DiscordClient sender, DSharpPlus.EventArgs.ClientErrorEventArgs e)
@@ -39,7 +39,7 @@ namespace PotatoBot.EventHandlers
         {
             var msg = "Unknown Event Triggered: " + e.EventName;
             sender.Logger.LogWarning(msg);
-            await (await sender.GetChannelAsync(LogChannel)).SendMessageAsync(msg);
+            await LogChannel.SendMessageAsync(msg);
         }
     }
 }

@@ -10,17 +10,17 @@ namespace PotatoBot.EventHandlers
     {
         public static Task Client_GuildRoleUpdated(DiscordClient sender, DSharpPlus.EventArgs.GuildRoleUpdateEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public static Task Client_GuildRoleDeleted(DiscordClient sender, DSharpPlus.EventArgs.GuildRoleDeleteEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public static Task Client_GuildRoleCreated(DiscordClient sender, DSharpPlus.EventArgs.GuildRoleCreateEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

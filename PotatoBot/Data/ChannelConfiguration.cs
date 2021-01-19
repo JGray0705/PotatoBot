@@ -1,18 +1,15 @@
-﻿using System;
+﻿using LiteDB;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PotatoBot.Data
 {
-    public class ChannelConfiguration : BaseConfiguration
+    public class ChannelConfiguration
     {
+        [BsonId]
+        public ulong Id { get; set; }
         public ulong GuildId { get; set; }
         public bool IsIgnored { get; set; }
-
-        public ChannelConfiguration()
-        {
-            DBName = "Guilds.db";
-            TableName = "ChannelConfiguration";
-        }
     }
 }

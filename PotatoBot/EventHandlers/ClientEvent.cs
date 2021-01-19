@@ -17,17 +17,17 @@ namespace PotatoBot.EventHandlers
 
         public static Task Client_ClientErrored(DiscordClient sender, DSharpPlus.EventArgs.ClientErrorEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public static Task Client_Heartbeated(DiscordClient sender, DSharpPlus.EventArgs.HeartbeatEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public static Task Client_Resumed(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs e)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public static Task Client_PresenceUpdated(DiscordClient sender, DSharpPlus.EventArgs.PresenceUpdateEventArgs e)

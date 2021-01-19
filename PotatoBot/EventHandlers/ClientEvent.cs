@@ -1,45 +1,41 @@
 ﻿using DSharpPlus;
 using Microsoft.Extensions.Logging;
+using PotatoBot.ExtensionMethods;
 using System;
+using DSharpPlus.EventArgs;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace PotatoBot.EventHandlers
 {
     public class ClientEvent : BaseEventHandler
     {
-        public static async Task Client_Ready(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs e)
+        public static async Task Client_Ready(DiscordClient sender, ReadyEventArgs e)
         {
             sender.Logger.LogInformation("Client ready!");
-            await LogChannel.SendMessageAsync("Client ready!");
+            await LogChannel.SendLogMessageAsync("Client ready", $"Client started at {DateTime.Now}", LogLevel.Information);
+            e.Handled = true;
         }
 
-        public static Task Client_ClientErrored(DiscordClient sender, DSharpPlus.EventArgs.ClientErrorEventArgs e)
+        public static async Task Client_ClientErrored(DiscordClient sender, ClientErrorEventArgs e)
         {
-            return Task.CompletedTask;
+            sender.Logger.LogError(e.Exception.Message);
+            await LogChannel.SendLogMessageAsync(e.EventName, e.Exception.Message, LogLevel.Error);
         }
 
-        public static Task Client_Heartbeated(DiscordClient sender, DSharpPlus.EventArgs.HeartbeatEventArgs e)
+        public static async Task Client_Heartbeated(DiscordClient sender, HeartbeatEventArgs e)
         {
-            return Task.CompletedTask;
+            var memberCount = sender.Guilds.Sum(x => x.Value.MemberCount);
+            await sender.UpdateStatusAsync(new DSharpPlus.Entities.DiscordActivity(sender.Guilds.Count + " guilds and " + memberCount + " members.", DSharpPlus.Entities.ActivityType.Watching));
         }
 
-        public static Task Client_Resumed(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs e)
-        {
-            return Task.CompletedTask;
-        }
-
-        public static Task Client_PresenceUpdated(DiscordClient sender, DSharpPlus.EventArgs.PresenceUpdateEventArgs e)
-        {
-            return Task.CompletedTask; // not sure anything needs to be done here, but added just in case
-        }
-
-        public static async Task Client_UnknownEvent(DiscordClient sender, DSharpPlus.EventArgs.UnknownEventArgs e)
+        public static async Task Client_UnknownEvent(DiscordClient sender, UnknownEventArgs e)
         {
             var msg = "Unknown Event Triggered: " + e.EventName;
             sender.Logger.LogWarning(msg);
-            await LogChannel.SendMessageAsync(msg);
+            await LogChannel.SendLogMessageAsync("Unknow Event", msg, LogLevel.Warning);
         }
     }
 }

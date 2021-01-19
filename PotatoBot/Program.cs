@@ -6,7 +6,7 @@ namespace PotatoBot
 {
     class Program
     {
-        
+        public static DiscordBot Bot;
         static void Main(string[] args)
         {
             // get the config file with the bot token
@@ -19,8 +19,8 @@ namespace PotatoBot
             var json = File.ReadAllText("config.json");
             var config = JsonConvert.DeserializeObject<ClientConfiguration>(json);
 
-            var bot = new DiscordBot(config);
-            bot.RunAsync().GetAwaiter().GetResult();
+            Bot = new DiscordBot(config);
+            Bot.RunAsync().GetAwaiter().GetResult();
         }
     }
 }

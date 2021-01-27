@@ -138,7 +138,7 @@ namespace PotatoBot
                         break;
                     default:
                         checkName = "Unknown Check Failed";
-                        msg = $"Check Failed {check.GetType().Name}";
+                        msg = $"Check Failed: {check.GetType().Name}";
                         break;
                 }
                 embed.AddField(checkName, msg);

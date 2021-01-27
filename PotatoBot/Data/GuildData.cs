@@ -32,7 +32,8 @@ namespace PotatoBot.Data
 
         public static ulong GetLogChannel(ulong guildId)
         {
-            return FindByID(guildId).LogChannel;
+            var guild = FindByID(guildId);
+            return guild == null ? 0 : guild.LogChannel;
         }
 
         public static bool CustomCommandsEnabled(ulong guildId)

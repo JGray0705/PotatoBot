@@ -4,14 +4,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using PotatoBot.Data;
+using DSharpPlus.Entities;
+using PotatoBot.ExtensionMethods;
+using Microsoft.Extensions.Logging;
 
 namespace PotatoBot.EventHandlers
 {
     public class GuildEvent : BaseEventHandler
     {
-        public static Task Client_GuildUpdated(DiscordClient sender, DSharpPlus.EventArgs.GuildUpdateEventArgs e)
+        public static async Task Client_GuildUpdated(DiscordClient sender, DSharpPlus.EventArgs.GuildUpdateEventArgs e)
         {
-            return Task.CompletedTask;
+            var ch = await GetLogChannel(sender, e.GuildAfter.Id);
+            if (ch == null) return;
+            var changes = SnowflakeChanges.CompareGuildChanges(e.GuildBefore, e.GuildAfter);
+            if(changes.Count > 0) await ch.SendLogMessageAsync("Server Updated", $"The following server properties were changed:\n {string.Join("\n\n", changes)}", LogLevel.Information);
         }
 
         public static Task Client_GuildUnavailable(DiscordClient sender, DSharpPlus.EventArgs.GuildDeleteEventArgs e)
@@ -33,7 +40,7 @@ namespace PotatoBot.EventHandlers
         {
             // update user status.. for fun
             var memberCount = e.Guilds.Sum(x => x.Value.MemberCount);
-            await sender.UpdateStatusAsync(new DSharpPlus.Entities.DiscordActivity(e.Guilds.Count + " guilds and " + memberCount + " members.", DSharpPlus.Entities.ActivityType.Watching));
+            await sender.UpdateStatusAsync(new DiscordActivity(e.Guilds.Count + " guilds and " + memberCount + " members.", ActivityType.Watching));
         }
 
         public static Task Client_GuildDeleted(DiscordClient sender, DSharpPlus.EventArgs.GuildDeleteEventArgs e)
@@ -79,6 +86,13 @@ namespace PotatoBot.EventHandlers
         public static Task Client_VoiceStateUpdated(DiscordClient sender, DSharpPlus.EventArgs.VoiceStateUpdateEventArgs e)
         {
             return Task.CompletedTask;
+        }
+
+        private static async Task<DiscordChannel> GetLogChannel(DiscordClient client, ulong guildId)
+        {
+            var logChannelId = GuildData.GetLogChannel(guildId);
+            if (logChannelId == 0) return null;
+            return await client.GetChannelAsync(logChannelId);
         }
     }
 }
